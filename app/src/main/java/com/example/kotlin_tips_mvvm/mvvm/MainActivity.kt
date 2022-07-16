@@ -1,12 +1,14 @@
 package com.example.kotlin_tips_mvvm.mvvm
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.viewModels
+import com.example.kotlin_tips_mvvm.Method
 import com.example.kotlin_tips_mvvm.databinding.ActivityMainBinding
 import com.example.kotlin_tips_mvvm.model.LoginState
 
@@ -22,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         initView()
         initObserver()
 
-        showKeyBoard(this, binding.edInput)
+        Method.showKeyBoard(this, binding.edInput)
     }
 
     private fun initView() {
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
                 loginViewModel.login(inputText)
 
-                hideKeyBoard(this@MainActivity, binding.edInput)
+                Method.hideKeyBoard(this@MainActivity, binding.edInput)
             }
         }
     }
@@ -47,21 +49,17 @@ class MainActivity : AppCompatActivity() {
             when (loginState) {
                 is LoginState.Success -> {
                     binding.tvState.text = "歡迎 ${loginState.account}"
+
+                    val b = Bundle()
+                    b.putString("Name", loginState.account)
+                    val i = Intent(this@MainActivity, ContentActivity::class.java)
+                    i.putExtras(b)
+                    startActivity(i)
                 }
                 is LoginState.Fail -> {
                     binding.tvState.text = "登入失敗"
                 }
             }
         }
-    }
-
-    fun showKeyBoard(activity: AppCompatActivity, ed: EditText){
-        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(ed, 0)
-    }
-
-    fun hideKeyBoard(context: Context, view: View) {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken,0)
     }
 }

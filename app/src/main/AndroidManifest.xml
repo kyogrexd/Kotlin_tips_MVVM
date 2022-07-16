@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kotlin_tips_MVVM">
         <activity
+            android:name=".mvvm.ContentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".mvvm.content"
+            android:exported="false" />
+        <activity
             android:name=".mvvm.MainActivity"
             android:exported="true">
             <intent-filter>
